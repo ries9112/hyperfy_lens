@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+node_modules/
+hyperfy_lens/node_modules/
+build/
+.DS_Store
+*.blend1
+.Rproj.user
+

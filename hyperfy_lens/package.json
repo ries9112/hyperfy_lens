@@ -1,0 +1,22 @@
+{
+  "name": "experimentApril2023",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "hyperfy-tools dev",
+    "build": "hyperfy-tools build",
+    "start": "hyperfy-tools start",
+    "connect": "hyperfy-tools connect",
+    "disconnect": "hyperfy-tools disconnect",
+    "upload": "hyperfy-tools upload"
+  },
+  "devDependencies": {
+    "hyperfy-tools": "2.23.0"
+  },
+  "dependencies": {
+    "@r-wasm/webr": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=16.14.2"
+  }
+}
