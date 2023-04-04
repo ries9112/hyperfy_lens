@@ -1,47 +1,48 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { DEG2RAD, useWorld, useSignal, useFields, useSyncState } from 'hyperfy'
+import React, { useRef, useEffect, useState } from 'react';
+import { DEG2RAD, useWorld, useSignal, useFields, useSyncState } from 'hyperfy';
 
-import { Tween } from './Tween'
+import { Tween } from './Tween';
 
-export const blenderVec3 = ([x, y, z]) => [x, z, -y]
+const blenderVec3 = ([x, y, z]) => [x, z, -y];
 
-const lidOffset = blenderVec3([0, 0.342208, 0.370742])
+const lidOffset = blenderVec3([0, 0.342208, 0.370742]);
 
-const OPEN_CLOSE_SPEED = 0.5
+const OPEN_CLOSE_SPEED = 0.5;
 
 export default function TreasureChest() {
-  const world = useWorld()
-  const lidRef = useRef()
-  const [state, dispatch] = useSyncState(state => state)
+  const world = useWorld();
+  const lidRef = useRef();
+  const [state, dispatch] = useSyncState((state) => state);
+  const [value, setValue] = useState(null);
 
   useEffect(() => {
-    const lid = lidRef.current
-    const tween = state.open ? openTween : closeTween
-    return world.onUpdate(delta => {
-      tween.set(world.getServerTime() - state.time)
-      lid.setRotationX(tween.value.deg * DEG2RAD)
-    })
-  }, [state.time])
+    const lid = lidRef.current;
+    const tween = state.open ? openTween : closeTween;
+    return world.onUpdate((delta) => {
+      tween.set(world.getServerTime() - state.time);
+      lid.setRotationX(tween.value.deg * DEG2RAD);
+    });
+  }, [state.time]);
 
   function setOpen(open) {
-    if (state.open === open) return
-    const time = world.getServerTime()
-    dispatch('setOpen', open, time)
+    if (state.open === open) return;
+    const time = world.getServerTime();
+    dispatch('setOpen', open, time);
   }
 
   function toggle() {
-    setOpen(!state.open)
+    setOpen(!state.open);
   }
 
   useSignal('Toggle', () => {
-    toggle()
-  })
+    toggle();
+  });
   useSignal('Open', () => {
-    setOpen(true)
-  })
+    setOpen(true);
+  });
   useSignal('Close', () => {
-    setOpen(false)
-  })
+    setOpen(false);
+  });
 
   return (
     <app>
@@ -52,28 +53,38 @@ export default function TreasureChest() {
           position={lidOffset}
           onClick={toggle}
         />
-        <model src="treasure-chest-bottom.glb" onClick={toggle} />
       </rigidbody>
+      <input
+        placeholder="Enter code"
+        bgColor="black"
+        color="white"
+        width={1.5}
+        value={value}
+        onChange={setValue}
+        onEnter={() => console.log('this is the value', value)}
+      />
     </app>
-  )
+  );
 }
 
 const initialState = {
   open: false,
   time: -9999,
-}
+};
 
 export function getStore(state = initialState) {
   return {
     state,
     actions: {
       setOpen(state, open, time) {
-        state.open = open
-        state.time = time
+        state.open = open;
+        state.time = time;
       },
     },
-  }
+  };
 }
 
-const openTween = new Tween({ deg: 0 }).to({ deg: -130 }, OPEN_CLOSE_SPEED, Tween.QUAD_IN_OUT) // prettier-ignore
-const closeTween = new Tween({ deg: -130 }).to({ deg: 0 }, OPEN_CLOSE_SPEED, Tween.QUAD_IN_OUT) // prettier-ignore
+const openTween = new Tween({ deg: 0 })
+  .to({ deg: -130 }, OPEN_CLOSE_SPEED, Tween.QUAD_IN_OUT); // prettier-ignore
+const closeTween = new Tween({ deg: -130 })
+  .to({ deg: 0 }, OPEN_CLOSE_SPEED, Tween.QUAD_IN_OUT); // prettier-ignore

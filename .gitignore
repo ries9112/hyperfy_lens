@@ -10,3 +10,10 @@ build/
 *.blend1
 .Rproj.user
 
+
+.space
+
+python_api/mlflow-291816-333a8dfdc1e7.json
+mlflow-291816-333a8dfdc1e7.json
+Spacefile
+python_api/Spacefile
