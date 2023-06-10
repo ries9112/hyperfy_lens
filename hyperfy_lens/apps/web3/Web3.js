@@ -2,22 +2,22 @@ import React, { useMemo, useState } from 'react'
 import { useEth } from 'hyperfy'
 
 // Lens 
-const CONTRACT = '0xeCd1d11B69FFd9794d45269247f9Fc139462bC12'
-// LensHub Proxy contract: 0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d
+const CONTRACT = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
 
 export function Web3() {
   const eth = useEth("polygon")
-  const contract = useMemo(() => eth.contract(CONTRACT, ['function getHandle(uint256 profileId)']) )
+  const contract = useMemo(() => eth.contract(CONTRACT))
+  // eth.contract(CONTRACT, ['function getHandle(uint256 profileId) external view override'])
   const [status, setStatus] = useState(null)
-
   async function getHandle(e) {
     // check to see if the user is logged in
     const { address } = e.avatar
     // if there's no address, notify them via <text />
     if (!address) return setStatus('Not connected!')
     setStatus('Checking...')
-    const supply = await contract.read('getHandle', '0x0102cc')
-    setStatus(`Handle: ${supply}`)
+    const handle = await contract.read('balanceOf', '0x8115AfD8DFfCE5579381AD27524b6Feeae917BEF')
+    setStatus(`Handle: ${handle}`)
+    console.log(handle)
   }
 
   async function follow(e) {
@@ -25,7 +25,7 @@ export function Web3() {
     if (!address) return setStatus('Not connected!')
     setStatus('Please confirm transaction')
     // follow user example
-    const tx = await contract.write('follow', [749], ['0x'])
+    const tx = await contract.write('transfer', "0x74DBb201ecc0B16934e68377BC13013883D9417b", '1')
     setStatus('Verifying...')
     await tx.wait()
     setStatus('Followed!')
